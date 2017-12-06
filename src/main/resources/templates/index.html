@@ -1,25 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
     <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="/index.css"/>
     <!-- jquery-->
-    <link rel="stylesheet" href="https://upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.3.min.js" crossorigin="anonymous"/>
+    <script src="https://upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.3.min.js" crossorigin="anonymous"/>
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"/>
-    <title>你好</title>
+    <title>ebk</title>
 </head>
 <body>
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <h3 class="panel-title">Bootstrap</h3>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">test</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">发送短信</a></li>
+                <li><a href="#about">短信回执</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
     </div>
-    <div class="panel-body">
-        <span>你好吗</span>
+</nav>
+
+<div class="container">
+    <div class="starter-template">
+        <div th:if="${msg!=null}" th:class="'alert alert-'+${msg.getStatus()}+' alert-dismissible'" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>TIPS：</strong> <th:block th:text="${msg.getMsg()}"></th:block>
+        </div>
+        <form action="sms/send">
+            <div class="form-group">
+                <label for="smsTemplete">模板</label>
+                <select class="form-control" id="smsTemplete" name="templateId">
+                    <option selected="selected">选择模板</option>
+                    <option value="63365">取件通知</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="var1">变量1</label>
+                <input type="text" class="form-control" id="var1" name="vars" placeholder=""/>
+            </div>
+            <div class="form-group">
+                <label for="var2">变量2</label>
+                <input type="text" class="form-control" id="var2" name="vars" placeholder=""/>
+            </div>
+            <div class="form-group">
+                <label for="phone">号码</label>
+                <textarea id="phone" name="phones" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputFile">上传文件</label>
+                <input type="file" id="exampleInputFile"/>
+                <p class="help-block">txt格式文本，每行1个号码</p>
+            </div>
+
+            <button type="submit" class="btn btn-default">发送</button>
+        </form>
     </div>
+
 </div>
 </body>
 </html>

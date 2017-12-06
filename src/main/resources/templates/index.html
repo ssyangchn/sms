@@ -12,6 +12,7 @@
     <script src="https://upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.3.min.js" crossorigin="anonymous"/>
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"/>
+    <script src="/index.js"></script>
     <title>ebk</title>
 </head>
 <body>
@@ -34,13 +35,22 @@
         </div><!--/.nav-collapse -->
     </div>
 </nav>
-
+<div hidden="hidden">
+    <div id="success" class="alert alert-success alert-dismissible fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>成功！</strong> <span class="msg"></span>
+    </div>
+    <div id="error" class="alert alert-danger alert-dismissible fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>失败！</strong> <span class="msg"></span>
+    </div>
+    <div class="form-group" id="varDiv">
+        <label id="varLabel" order="3"></label>
+        <input type="text" class="form-control" name="vars" placeholder=""/>
+    </div>
+</div>
 <div class="container">
-    <div class="starter-template">
-        <div th:if="${msg!=null}" th:class="'alert alert-'+${msg.getStatus()}+' alert-dismissible'" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <strong>TIPS：</strong> <th:block th:text="${msg.getMsg()}"></th:block>
-        </div>
+    <div class="starter-template" id="start">
         <form action="sms/send">
             <div class="form-group">
                 <label for="smsTemplete">模板</label>
@@ -57,6 +67,7 @@
                 <label for="var2">变量2</label>
                 <input type="text" class="form-control" id="var2" name="vars" placeholder=""/>
             </div>
+            <button type="button" id="addVar" class="btn btn-default">添加变量</button>
             <div class="form-group">
                 <label for="phone">号码</label>
                 <textarea id="phone" name="phones" class="form-control" rows="3"></textarea>
@@ -67,7 +78,8 @@
                 <p class="help-block">txt格式文本，每行1个号码</p>
             </div>
 
-            <button type="submit" class="btn btn-default">发送</button>
+            <button type="button" id="send" class="btn btn-primary">发送</button>
+            <button type="reset" class="btn btn-default">清空</button>
             <button type="button" class="btn btn-default">格式化</button>
         </form>
     </div>

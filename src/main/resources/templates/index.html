@@ -9,11 +9,11 @@
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
     <link rel="stylesheet" href="/index.css"/>
     <!-- jquery-->
-    <script src="https://upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.3.min.js" crossorigin="anonymous"/>
+    <script src="https://cdn.bootcss.com/jquery/1.9.1/jquery.js" crossorigin="anonymous"/>
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"/>
     <script src="/index.js"></script>
-    <title>ebk</title>
+    <title>百世快递</title>
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -25,7 +25,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">test</a>
+            <a class="navbar-brand" href="#">百世快递</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
@@ -35,55 +35,64 @@
         </div><!--/.nav-collapse -->
     </div>
 </nav>
-<div hidden="hidden">
-    <div id="success" class="alert alert-success alert-dismissible fade in" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <strong>成功！</strong> <span class="msg"></span>
-    </div>
-    <div id="error" class="alert alert-danger alert-dismissible fade in" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <strong>失败！</strong> <span class="msg"></span>
-    </div>
-    <div class="form-group" id="varDiv">
-        <label id="varLabel" order="3"></label>
-        <input type="text" class="form-control" name="vars" placeholder=""/>
-    </div>
-</div>
+<div id="msgBox"></div>
 <div class="container">
     <div class="starter-template" id="start">
-        <form action="sms/send">
-            <div class="form-group">
-                <label for="smsTemplete">模板</label>
-                <select class="form-control" id="smsTemplete" name="templateId">
-                    <option selected="selected">选择模板</option>
-                    <option value="63365">取件通知</option>
-                </select>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">短信群发</h3>
             </div>
-            <div class="form-group">
-                <label for="var1">变量1</label>
-                <input type="text" class="form-control" id="var1" name="vars" placeholder=""/>
-            </div>
-            <div class="form-group">
-                <label for="var2">变量2</label>
-                <input type="text" class="form-control" id="var2" name="vars" placeholder=""/>
-            </div>
-            <button type="button" id="addVar" class="btn btn-default">添加变量</button>
-            <div class="form-group">
-                <label for="phone">号码</label>
-                <textarea id="phone" name="phones" class="form-control" rows="3"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="exampleInputFile">上传文件</label>
-                <input type="file" id="exampleInputFile"/>
-                <p class="help-block">txt格式文本，每行1个号码</p>
-            </div>
+            <div class="panel-body">
+                <form>
+                    <div class="form-group">
+                        <label for="smsTemplete">短信模板</label>
+                        <select class="form-control" id="smsTemplete" name="templateId">
+                            <option th:each="opt:${smstpl}" th:text="${opt.text}" th:value="${opt.id}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group" order="1">
+                        <label for="var1">变量1</label>
+                        <input type="text" class="form-control" id="var1" name="vars" placeholder=""/>
+                    </div>
+                    <div class="form-group" order="2">
+                        <label for="var2">变量2</label>
+                        <input type="text" class="form-control" id="var2" name="vars" placeholder=""/>
+                    </div>
+                    <div class="form-group" order="2">
+                        <label for="var3">变量3</label>
+                        <input type="text" class="form-control" id="var3" name="vars" placeholder=""/>
+                    </div>
+                    <div class="form-group" order="2">
+                        <label for="var4">变量4</label>
+                        <input type="text" class="form-control" id="var4" name="vars" placeholder=""/>
+                    </div>
+                    <div class="btn-group" role="group" aria-label="...">
+                        <button type="button" id="addVar" class="btn btn-default">添加变量</button>
+                        <button type="button" id="delVar" class="btn btn-default">删除变量</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">号码 当前数量：<label id="count" class="text-success">0</label></label>
+                        <textarea id="phone" name="phones" class="form-control" rows="10"></textarea>
+                    </div>
 
-            <button type="button" id="send" class="btn btn-primary">发送</button>
-            <button type="reset" class="btn btn-default">清空</button>
-            <button type="button" class="btn btn-default">格式化</button>
-        </form>
+                    <div class="btn-group" role="group" aria-label="...">
+                        <button type="button" id="clearPhone" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="清空号码框">清空号码</button>
+                        <button type="button" id="formatPhone" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="去除重复并格式化">格式化</button>
+                        <button type="button" id="send" class="btn btn-primary">发送</button>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+
     </div>
-
+    <!--<div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">短信群发</h3>
+        </div>
+        <div class="panel-body"></div>
+    </div>-->
 </div>
 </body>
 </html>

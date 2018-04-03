@@ -15,6 +15,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.thymeleaf.util.ArrayUtils;
 
 import java.text.MessageFormat;
 import java.util.*;
@@ -22,8 +23,6 @@ import java.util.*;
 @PropertySource(value = {"classpath:sms.properties"}, encoding = "UTF-8")
 @Controller
 public class IndexController {
-    @Value("${sendUrl}")
-    private String sendUrl;
     @Value("${appKey}")
     private String appKey;
     @Value("${appId}")
@@ -66,10 +65,14 @@ public class IndexController {
         Iterator<String> iterator = set.iterator();
         StringBuilder errorMsg = new StringBuilder();
         int num = 0;
+        String var0 = "";
+        if (vars.length > 0) {
+            var0 = vars[0];
+        }
         while (iterator.hasNext()) {
             String mobile = iterator.next().trim();
-            String[] split = mobile.split(",");
-            req.getParams().set(0, MessageFormat.format("货号{0}号",split[0]));
+            String[] split = mobile.split("\t");
+            req.getParams().set(0,var0+MessageFormat.format("{0}号",split[0]));
             tels.add(new Tel(split[1]));
                 try {
                     num += doSend(req);
